@@ -12,8 +12,8 @@ class PapertrailLogging {
     this.provider = this.serverless.getProvider('aws');
 
     this.hooks = {
-      'before:deploy:createDeploymentArtifacts': this.beforeDeployCreateDeploymentArtifacts.bind(this),
-      'deploy:compileEvents': this.deployCompileEvents.bind(this),
+      'package:createDeploymentArtifacts': this.packageCreateDeploymentArtifacts.bind(this),
+      'package:compileEvents': this.packageCompileEvents.bind(this),
       'after:deploy:deploy': this.afterDeployDeploy.bind(this),
     };
   }
@@ -27,10 +27,10 @@ class PapertrailLogging {
   }
 
   getEnvFilePath() {
-    return path.join(this.serverless.config.servicePath, LogSubscription.getFunctionFilename());
+    return path.join(this.serverless.config.servicePath, this.getFunctionFilename());
   }
 
-  beforeDeployCreateDeploymentArtifacts() {
+  packageCreateDeploymentArtifacts() {
     this.serverless.cli.log('Creating temporary logger function...');
     let functionPath = this.getEnvFilePath();
 
@@ -44,7 +44,7 @@ class PapertrailLogging {
         PapertrailLoggerLogGroup: {
           Type: "AWS::Logs::LogGroup",
           Properties: {
-            LogGroupName: `/aws/lambda/${this.service.service}-${this.service.provider.stage}-${LogSubscription.getFunctionName()}`
+            LogGroupName: `/aws/lambda/${this.service.service}-${this.service.provider.stage}-${this.getFunctionName()}`
           }
         }
       }
@@ -58,18 +58,18 @@ class PapertrailLogging {
       .replace('%papertrailHostname%', this.service.service)
       .replace('%papertrailProgram%', this.service.provider.stage);
     fs.writeFileSync(path.join(functionPath, 'handler.js'), handlerFunction);
-    this.service.functions[LogSubscription.getFunctionName()] = {
-      handler: `${LogSubscription.getFunctionFilename()}/handler.handler`,
-      name: `${this.service.service}-${this.service.provider.stage}-${LogSubscription.getFunctionName()}`,
+    this.service.functions[this.getFunctionName()] = {
+      handler: `${this.getFunctionFilename()}/handler.handler`,
+      name: `${this.service.service}-${this.service.provider.stage}-${this.getFunctionName()}`,
       tags: _.has(this.service.provider, 'stackTags') ? this.service.provider.stackTags : {},
       events: []
     };
   }
 
-  deployCompileEvents() {
+  packageCompileEvents() {
     this.serverless.cli.log('Creating log subscriptions...');
 
-    const loggerLogicalId = this.provider.naming.getLambdaLogicalId(LogSubscription.getFunctionName());
+    const loggerLogicalId = this.provider.naming.getLambdaLogicalId(this.getFunctionName());
 
     _.each(this.service.provider.compiledCloudFormationTemplate.Resources, (item, key) => {
       if (_.has(item, 'Type') && item.Type === 'AWS::Logs::LogGroup') {
@@ -95,7 +95,7 @@ class PapertrailLogging {
 
     const functions = this.service.getAllFunctions();
     functions.forEach((functionName) => {
-      if (functionName !== LogSubscription.getFunctionName()) {
+      if (functionName !== this.getFunctionName()) {
         const functionData = this.service.getFunction(functionName);
         const normalizedFunctionName = this.provider.naming.getNormalizedFunctionName(functionName);
         _.merge(
