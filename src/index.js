@@ -27,7 +27,7 @@ class PapertrailLogging {
   }
 
   getEnvFilePath() {
-    return path.join(this.serverless.config.servicePath, this.getFunctionFilename());
+    return path.join(this.serverless.config.servicePath, PapertrailLogging.getFunctionName());
   }
 
   packageCreateDeploymentArtifacts() {
@@ -44,7 +44,7 @@ class PapertrailLogging {
         PapertrailLoggerLogGroup: {
           Type: "AWS::Logs::LogGroup",
           Properties: {
-            LogGroupName: `/aws/lambda/${this.service.service}-${this.service.provider.stage}-${this.getFunctionName()}`
+            LogGroupName: `/aws/lambda/${this.service.service}-${this.service.provider.stage}-${PapertrailLogging.getFunctionName()}`
           }
         }
       }
@@ -58,9 +58,9 @@ class PapertrailLogging {
       .replace('%papertrailHostname%', this.service.service)
       .replace('%papertrailProgram%', this.service.provider.stage);
     fs.writeFileSync(path.join(functionPath, 'handler.js'), handlerFunction);
-    this.service.functions[this.getFunctionName()] = {
-      handler: `${this.getFunctionFilename()}/handler.handler`,
-      name: `${this.service.service}-${this.service.provider.stage}-${this.getFunctionName()}`,
+    this.service.functions[PapertrailLogging.getFunctionName()] = {
+      handler: `${PapertrailLogging.getFunctionName()}/handler.handler`,
+      name: `${this.service.service}-${this.service.provider.stage}-${PapertrailLogging.getFunctionName()}`,
       tags: _.has(this.service.provider, 'stackTags') ? this.service.provider.stackTags : {},
       events: []
     };
@@ -69,7 +69,7 @@ class PapertrailLogging {
   packageCompileEvents() {
     this.serverless.cli.log('Creating log subscriptions...');
 
-    const loggerLogicalId = this.provider.naming.getLambdaLogicalId(this.getFunctionName());
+    const loggerLogicalId = this.provider.naming.getLambdaLogicalId(PapertrailLogging.getFunctionName());
 
     _.each(this.service.provider.compiledCloudFormationTemplate.Resources, (item, key) => {
       if (_.has(item, 'Type') && item.Type === 'AWS::Logs::LogGroup') {
@@ -95,7 +95,7 @@ class PapertrailLogging {
 
     const functions = this.service.getAllFunctions();
     functions.forEach((functionName) => {
-      if (functionName !== this.getFunctionName()) {
+      if (functionName !== PapertrailLogging.getFunctionName()) {
         const functionData = this.service.getFunction(functionName);
         const normalizedFunctionName = this.provider.naming.getNormalizedFunctionName(functionName);
         _.merge(
