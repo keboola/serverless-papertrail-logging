@@ -1,0 +1,9 @@
+# package directories
+node_modules
+yarn.lock
+
+# Serverless directories
+.serverless
+.webpack
+.env
+.docker

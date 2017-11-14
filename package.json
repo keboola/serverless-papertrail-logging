@@ -1,0 +1,21 @@
+{
+  "name": "serverless-papertrail-logging",
+  "version": "1.0.0",
+  "description": "Serverless Plugin for log delivery from CloudWatch Logs to Papertrail using a lambda function with log groups subscription",
+  "main": "src/index.js",
+  "repository": "https://github.com/keboola/serverless-papertrail-logging",
+  "author": "Jakub Matejka <jakub@keboola.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "winston": "^2.4.0",
+    "winston-papertrail": "^1.0.5",
+    "zlib": "^1.0.5"
+  },
+  "peerDependencies": {
+    "serverless": "^1.24.1"
+  }
+}
