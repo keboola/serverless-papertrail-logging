@@ -1,5 +1,5 @@
 {
-  "name": "serverless-papertrail-logging",
+  "name": "@keboola/serverless-papertrail-logging",
   "version": "1.0.0",
   "description": "Serverless Plugin for log delivery from CloudWatch Logs to Papertrail using a lambda function with log groups subscription",
   "main": "src/index.js",
