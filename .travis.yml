@@ -4,8 +4,7 @@ node_js:
 deploy:
   provider: npm
   email: devel@keboola.com
-  api_key:
-    secure: "Tydq86AobfioyAkHMKBJ0XL8UgSXVPZXAdcD63O7tfdkeSMIOrhOWyi2w9/HAw3d4xQTz7x684OYolu3lc1DA6YAYMDYkeecTzzeOHm6mga3nDHrcMwdO0JkyIBCsjdSRo16o71Dxp6+/4t0nbzVCeo25bXrh2YV0Gc7/YstDL7LZ2s8/98mJCle7IixKq5wMdrwDnxr4g7D7WcwN9n7wUJUF7TvrKZv5MqdPKxqgZr6Nt99WsrLWfSaNW+lv6m1DPauX2xWyOqhQz6CeJrgnyg5aRi7HMOoGRGSMwPCosfEcYBq61Pn3ZXc4sD7gfeUzDcSJCFSiT31GSiMF7EsSPc8ZFp4WhlV0G11OfinnyQ947GIKRKORpEjg/SL8Qbep2Ax79j/6XX6eODqE0Q7Qgmc8ICWjv56B/JQpjekqPrU9wXxwxkkrHBMGNdouqthisbRMTQlAvNSg02c8xtNl0GuQKCqSXzVzgokATU14EYepcw0ESyDu0rraa5o5PqUUWF+5TffvuVf6UVZbWvaX8oqAlZlyXKdAARFx0n9bapi/JXhs4uTzlK8+ELGyLblEhWk7T2Ee0hJITtuyZ/m5K/O8h6jTKgcW3NCvvrW/dkPhMdhEgwfA/5XY1HDSwZoVPFJV/gza3gsoxpWuTm3OXo151/syO/7h7cVeTVb5GQ="
+  api_key: $NPM_TOKEN
   on:
     tags: true
     repo: keboola/serverless-papertrail-logging
