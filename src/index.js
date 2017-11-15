@@ -41,9 +41,9 @@ class PapertrailLogging {
         PapertrailLoggerLogGroup: {
           Type: "AWS::Logs::LogGroup",
           Properties: {
-            LogGroupName: `/aws/lambda/${loggerFunctionFullName}`
-          }
-        }
+            LogGroupName: `/aws/lambda/${loggerFunctionFullName}`,
+          },
+        },
       }
     );
 
@@ -59,7 +59,7 @@ class PapertrailLogging {
       handler: `${PapertrailLogging.getFunctionName()}/handler.handler`,
       name: loggerFunctionFullName,
       tags: _.has(this.service.provider, 'stackTags') ? this.service.provider.stackTags : {},
-      events: []
+      events: [],
     };
   }
 
@@ -85,8 +85,8 @@ class PapertrailLogging {
             Principal: { 'Fn::Sub': 'logs.${AWS::Region}.amazonaws.com' },
             SourceArn: { 'Fn::Sub': 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*' },
           },
-          DependsOn: [loggerLogicalId]
-        }
+          DependsOn: [loggerLogicalId],
+        },
       }
     );
 
@@ -105,8 +105,8 @@ class PapertrailLogging {
                 FilterPattern: '',
                 LogGroupName: `/aws/lambda/${functionData.name}`,
               },
-              DependsOn: ['LambdaPermissionForSubscription']
-            }
+              DependsOn: ['LambdaPermissionForSubscription'],
+            },
           }
         );
       }

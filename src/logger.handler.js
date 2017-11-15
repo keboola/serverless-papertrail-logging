@@ -5,6 +5,31 @@ const papertrail = require('winston-papertrail').Papertrail;
 const winston = require('winston');
 const zlib = require('zlib');
 
+const formatLog = (level, message) => {
+  const consoleLog = message.split('\t');
+  if (consoleLog.length === 3) {
+    try {
+      const logData = JSON.parse(consoleLog[2]);
+      if (_.has(logData.event, 'body') && _.isString(logData.event.body)) {
+        logData.event.body = JSON.parse(logData.event.body);
+      }
+      return JSON.stringify(logData);
+    } catch (e) {
+      return JSON.stringify({ requestId: consoleLog[1], log: consoleLog[2] });
+    }
+  }
+
+  try {
+    const logData = JSON.parse(message);
+    if (!_.has(logData, 'statusCode')) {
+      logData.statusCode = 500;
+    }
+    return JSON.stringify(logData);
+  } catch (e) {
+    return message;
+  }
+};
+
 exports.handler = function (event, context, callback) {
   const logger = new (winston.Logger)({
     transports: [],
@@ -18,30 +43,7 @@ exports.handler = function (event, context, callback) {
     includeMetaInMessage: false,
     handleExceptions: true,
     humanReadableUnhandledException: false,
-    logFormat: (level, message) => {
-      const consoleLog = message.split('\t');
-      if (consoleLog.length === 3) {
-        try {
-          const logData = JSON.parse(consoleLog[2]);
-          if (_.has(logData.event, 'body') && _.isString(logData.event.body)) {
-            logData.event.body = JSON.parse(logData.event.body);
-          }
-          return JSON.stringify(logData);
-        } catch (e) {
-          return JSON.stringify({ requestId: consoleLog[1], log: consoleLog[2] });
-        }
-      }
-
-      try {
-        const logData = JSON.parse(message);
-        if (!_.has(logData, 'statusCode')) {
-          logData.statusCode = 500;
-        }
-        return JSON.stringify(logData);
-      } catch (e) {
-        return message;
-      }
-    },
+    logFormat: formatLog,
   });
 
   const payload = new Buffer(event.awslogs.data, 'base64');
