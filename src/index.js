@@ -12,8 +12,8 @@ class PapertrailLogging {
     this.provider = this.serverless.getProvider('aws');
 
     this.hooks = {
-      'package:createDeploymentArtifacts': this.packageCreateDeploymentArtifacts.bind(this),
-      'package:compileEvents': this.packageCompileEvents.bind(this),
+      'before:package:createDeploymentArtifacts': this.beforePackageCreateDeploymentArtifacts.bind(this),
+      'before:package:compileEvents': this.beforePackageCompileEvents.bind(this),
       'after:deploy:deploy': this.afterDeployDeploy.bind(this),
     };
   }
@@ -30,7 +30,7 @@ class PapertrailLogging {
     return path.join(this.serverless.config.servicePath, PapertrailLogging.getFunctionName());
   }
 
-  packageCreateDeploymentArtifacts() {
+  beforePackageCreateDeploymentArtifacts() {
     this.serverless.cli.log('Creating temporary logger function...');
     let functionPath = this.getEnvFilePath();
 
@@ -66,7 +66,7 @@ class PapertrailLogging {
     };
   }
 
-  packageCompileEvents() {
+  beforePackageCompileEvents() {
     this.serverless.cli.log('Creating log subscriptions...');
 
     const loggerLogicalId = this.provider.naming.getLambdaLogicalId(PapertrailLogging.getFunctionName());
