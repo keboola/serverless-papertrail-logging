@@ -3,7 +3,7 @@ node_js:
 - node
 deploy:
   provider: npm
-  email: devel@keboola.com
+  email: $NPM_EMAIL
   api_key: $NPM_TOKEN
   on:
     tags: true
