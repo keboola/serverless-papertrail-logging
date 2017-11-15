@@ -22,10 +22,6 @@ class PapertrailLogging {
     return 'papertrailLogger';
   }
 
-  static getFunctionFilename() {
-    return 'papertrail-logger-function';
-  }
-
   getEnvFilePath() {
     return path.join(this.serverless.config.servicePath, PapertrailLogging.getFunctionName());
   }
@@ -38,13 +34,14 @@ class PapertrailLogging {
       fs.mkdirSync(functionPath);
     }
 
+    const loggerFunctionFullName = `${this.service.service}-${this.service.provider.stage}-${PapertrailLogging.getFunctionName()}`;
     _.merge(
       this.service.provider.compiledCloudFormationTemplate.Resources,
       {
         PapertrailLoggerLogGroup: {
           Type: "AWS::Logs::LogGroup",
           Properties: {
-            LogGroupName: `/aws/lambda/${this.service.service}-${this.service.provider.stage}-${PapertrailLogging.getFunctionName()}`
+            LogGroupName: `/aws/lambda/${loggerFunctionFullName}`
           }
         }
       }
@@ -60,7 +57,7 @@ class PapertrailLogging {
     fs.writeFileSync(path.join(functionPath, 'handler.js'), handlerFunction);
     this.service.functions[PapertrailLogging.getFunctionName()] = {
       handler: `${PapertrailLogging.getFunctionName()}/handler.handler`,
-      name: `${this.service.service}-${this.service.provider.stage}-${PapertrailLogging.getFunctionName()}`,
+      name: loggerFunctionFullName,
       tags: _.has(this.service.provider, 'stackTags') ? this.service.provider.stackTags : {},
       events: []
     };
