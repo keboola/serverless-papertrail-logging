@@ -35,7 +35,7 @@ exports.handler = function (event, context, callback) {
     transports: [],
   });
   logger.add(papertrail, {
-    host: 'logs.papertrailapp.com',
+    host: '%papertrailHost%',
     port: '%papertrailPort%',
     hostname: '%papertrailHostname%',
     program: '%papertrailProgram%',
