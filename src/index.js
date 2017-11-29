@@ -55,6 +55,7 @@ class PapertrailLogging {
     let templateFile = fs.readFileSync(templatePath, 'utf-8');
 
     let handlerFunction = templateFile
+      .replace('%papertrailHost%', this.service.custom.papertrail.host)
       .replace('%papertrailPort%', this.service.custom.papertrail.port)
       .replace('%papertrailHostname%', this.service.service)
       .replace('%papertrailProgram%', this.service.provider.stage);
