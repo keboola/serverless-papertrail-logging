@@ -13,8 +13,8 @@ const formatLog = (level, message) => {
       if (_.has(logData.event, 'body') && _.isString(logData.event.body)) {
         logData.event.body = JSON.parse(logData.event.body);
       }
-      if (!_.has(logData, 'requestId')) {
-        logData.requestId = consoleLog[1];
+      if (!_.has(logData, 'event.requestId')) {
+        logData.event.requestId = consoleLog[1];
       }
       return JSON.stringify(logData);
     } catch (e) {
