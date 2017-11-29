@@ -16,6 +16,10 @@ class PapertrailLogging {
       'before:package:compileEvents': this.beforePackageCompileEvents.bind(this),
       'after:deploy:deploy': this.afterDeployDeploy.bind(this),
     };
+
+    if (!_.has(this.service, 'custom.papertrail.port')) {
+      throw new this.serverless.classes.Error('Configure Papertrail port in custom.papertrail.port of the serverless.yml');
+    }
   }
 
   static getFunctionName() {

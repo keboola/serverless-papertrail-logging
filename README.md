@@ -12,6 +12,10 @@ Serverless plugin for log delivery from CloudWatch Logs to Papertrail using a la
 1. Install npm package: `yarn add @keboola/serverless-papertrail-logging --dev`
 2. Add plugin to your `serverless.yml`:
 ```yaml
+custom:
+  papertrail:
+    port: 1234
+    
 plugins:
 - '@keboola/serverless-papertrail-logging'
 ```
