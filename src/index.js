@@ -20,6 +20,9 @@ class PapertrailLogging {
     if (!_.has(this.service, 'custom.papertrail.port')) {
       throw new this.serverless.classes.Error('Configure Papertrail port in custom.papertrail.port of the serverless.yml');
     }
+    if (!_.has(this.service, 'custom.papertrail.host')) {
+      throw new this.serverless.classes.Error('Configure Papertrail host in custom.papertrail.host of the serverless.yml');
+    }
   }
 
   static getFunctionName() {
@@ -56,6 +59,7 @@ class PapertrailLogging {
 
     let handlerFunction = templateFile
       .replace('%papertrailPort%', this.service.custom.papertrail.port)
+      .replace('%papertrailHost%', this.service.custom.papertrail.host)
       .replace('%papertrailHostname%', this.service.service)
       .replace('%papertrailProgram%', this.service.provider.stage);
     fs.writeFileSync(path.join(functionPath, 'handler.js'), handlerFunction);
