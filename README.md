@@ -15,7 +15,8 @@ The plugin ignores implicit Lambda logs (starting with `START`, `END` and `REPOR
 ```yaml
 custom:
   papertrail:
-    port: 1234
+    host: logsN.papertrailapp.com
+    port: 12345
     
 plugins:
 - '@keboola/serverless-papertrail-logging'
