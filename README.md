@@ -16,8 +16,11 @@ The plugin ignores implicit Lambda logs (starting with `START`, `END` and `REPOR
 custom:
   papertrail:
     port: 1234
+    host: logs.papertrailapp.com
     
 plugins:
 - '@keboola/serverless-papertrail-logging'
 ```
  It must be put before **serverless-webpack** and other similar plugins to work correctly. 
+ 
+ Host name is optional and has default value `logs.papertrailapp.com`. 

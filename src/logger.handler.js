@@ -33,12 +33,12 @@ const formatLog = (level, message) => {
   }
 };
 
-exports.handler = function (event, context, callback) {
+exports.handler = (event, context, callback) => {
   const logger = new (winston.Logger)({
     transports: [],
   });
   logger.add(papertrail, {
-    host: 'logs.papertrailapp.com',
+    host: '%papertrailHost%',
     port: '%papertrailPort%',
     hostname: '%papertrailHostname%',
     program: '%papertrailProgram%',
