@@ -17,10 +17,14 @@ custom:
   papertrail:
     port: 1234
     host: logs.papertrailapp.com
-    
+    hostname: serviceName
+    program: stage
+
 plugins:
 - '@keboola/serverless-papertrail-logging'
 ```
- It must be put before **serverless-webpack** and other similar plugins to work correctly. 
- 
- Host name is optional and has default value `logs.papertrailapp.com`. 
+ It must be put before **serverless-webpack** and other similar plugins to work correctly.
+
+- `host` - optional, default is `logs.papertrailapp.com`
+- `hostname` - optional, default is service name
+- `program` - optional, default is service stage
