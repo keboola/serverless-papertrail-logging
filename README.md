@@ -25,6 +25,7 @@ plugins:
 ```
  It must be put before **serverless-webpack** and other similar plugins to work correctly.
 
+- `port` - required, port number assigned for you by Papertrail
 - `host` - optional, default is `logs.papertrailapp.com`
 - `hostname` - optional, default is service name
 - `program` - optional, default is service stage
