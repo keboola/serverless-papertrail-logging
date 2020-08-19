@@ -1,52 +1,22 @@
 'use strict';
 
+const { PapertrailTransport } = require('winston-papertrail-transport')
 const _ = require('lodash');
-const papertrail = require('winston-papertrail').Papertrail;
 const winston = require('winston');
 const zlib = require('zlib');
 
-const formatLog = (level, message) => {
-  const consoleLog = message.split('\t');
-  if (consoleLog.length === 3) {
-    try {
-      const logData = JSON.parse(consoleLog[2]);
-      if (_.has(logData.event, 'body') && _.isString(logData.event.body)) {
-        logData.event.body = JSON.parse(logData.event.body);
-      }
-      if (!_.has(logData, 'event.requestId')) {
-        logData.event.requestId = consoleLog[1];
-      }
-      return JSON.stringify(logData);
-    } catch (e) {
-      return JSON.stringify({ requestId: consoleLog[1], log: consoleLog[2] });
-    }
-  }
-
-  try {
-    const logData = JSON.parse(message);
-    if (!_.has(logData, 'statusCode')) {
-      logData.statusCode = 500;
-    }
-    return JSON.stringify(logData);
-  } catch (e) {
-    return message;
-  }
-};
-
 exports.handler = (event, context, callback) => {
-  const logger = new (winston.Logger)({
-    transports: [],
-  });
-  logger.add(papertrail, {
+  const papertrailTransport = new PapertrailTransport({
     host: '%papertrailHost%',
     port: '%papertrailPort%',
+    colorize: true,
     hostname: '%papertrailHostname%',
-    program: '%papertrailProgram%',
-    flushOnClose: true,
-    includeMetaInMessage: false,
-    handleExceptions: true,
-    humanReadableUnhandledException: false,
-    logFormat: formatLog,
+    program: '%papertrailProgram%'
+  });
+
+  const logger = winston.createLogger({
+    transports: [papertrailTransport],
+    format: winston.format.combine(winston.format.colorize(), winston.format.simple())
   });
 
   const payload = new Buffer(event.awslogs.data, 'base64');
