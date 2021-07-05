@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "winston": "^2.4.0",
-    "winston-papertrail": "^1.0.5",
+    "winston": "^3.3.3",
+    "winston-papertrail-transport": "^1.0.5",
     "zlib": "^1.0.5"
   },
   "peerDependencies": {
