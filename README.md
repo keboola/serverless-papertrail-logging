@@ -10,7 +10,7 @@ The plugin ignores implicit Lambda logs (starting with `START`, `END` and `REPOR
 
 ### Installation
 
-1. Install npm package: `yarn add @keboola/serverless-papertrail-logging --dev`
+1. Install npm package: `yarn add @keboola/serverless-papertrail-logging`
 2. Add plugin to your `serverless.yml`:
 ```yaml
 custom:
