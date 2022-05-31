@@ -29,3 +29,11 @@ plugins:
 - `host` - optional, default is `logs.papertrailapp.com`
 - `hostname` - optional, default is service name
 - `program` - optional, default is service stage
+
+## License
+
+MIT licensed, see [LICENSE](./LICENSE) file.
+
+## License
+
+MIT licensed, see [LICENSE](./LICENSE) file.
